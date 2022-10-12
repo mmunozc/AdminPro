@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component} from '@angular/core';
 
 @Component({
   selector: 'app-grafica1',
@@ -6,11 +6,11 @@ import { Component, OnInit } from '@angular/core';
   styles: [
   ]
 })
-export class Grafica1Component implements OnInit {
+export class Grafica1Component{
+  public labels1: string[] = ['label1', 'label2', 'label3' ];
 
-  constructor() { }
-
-  ngOnInit(): void {
-  }
+  public data1 = [
+    [ 200, 350, 300 ],
+  ];
 
 }
