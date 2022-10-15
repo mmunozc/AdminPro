@@ -1,4 +1,6 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
+import { ActivationEnd, Router } from '@angular/router';
+import { filter, map, Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-breadcrumbs',
@@ -6,11 +8,30 @@ import { Component, OnInit } from '@angular/core';
   styles: [
   ]
 })
-export class BreadcrumbsComponent implements OnInit {
+export class BreadcrumbsComponent implements OnDestroy{
 
-  constructor() { }
+  public titulo!: string
+  public titulosubs$: Subscription
 
-  ngOnInit(): void {
+  constructor(private router: Router) {
+    this.titulosubs$ = this.getArgumentosRuta()
+    .subscribe(({titulo}) => {
+      this.titulo = titulo;
+      document.title = `AdminPro - ${titulo}`;
+    })
   }
+  ngOnDestroy(): void {
+    this.titulosubs$.unsubscribe();
+  }
+
+  getArgumentosRuta(){
+    return this.router.events
+    .pipe(
+      filter((event): event is ActivationEnd => event instanceof ActivationEnd), 
+      filter((event: ActivationEnd) => event.snapshot.firstChild === null),
+      map((event: ActivationEnd) => event.snapshot.data),  
+    )
+  }
+
 
 }
